@@ -122,7 +122,7 @@ def many_gaussian_potentials(x,sigmas,initxs):
     return reduce((lambda x,y: x+y),map(gatx,sigmas,initxs))
   
 sim_dic = {'numxs':2000,'numsteps':2000,
-           'potential_function': lambda x: step_potential(x,0.0,110.0,50.0,50.5),
+           'potential_function': lambda x: 0,
             'maximum_x':100,'mass':0.5,'sigma':5,'k0':10,'initx':10.0,'p':3}
             
 # q = k0/m = groupvelocity, energy = k**2/2m, 
@@ -139,7 +139,7 @@ def plot_simulation_step(data,stepnum,resfunc,fn,c1,c2):
     ax1.set_xlabel('Distance')
     ax1.set_ylabel('square amplitude')
     ax2.plot(xs, pot, color=c2)
-    ax2.set_ylim(0,max(pot)*1.1)
+    ax2.set_ylim(min(pot),max(pot)*1.1 or 0.01)
     ax2.set_ylabel('Potential (in units of wavefunction energy)')
     plt.savefig(fn+str(stepnum)+'.png')
     plt.close('all')
@@ -152,18 +152,6 @@ def phase(compnum):
 
 for ts in range(0,1001,100):
     plot_simulation_step(simres,ts,square_amplitude,'wavef','blue','red')
-
-def fft_wavef_step(data,stepnum,fn):
-    fdata = np.abs(fp.fft(data['wavefunction'][stepnum])[:400])
-    binsize = (1.0*data['maximum_x'])/data['numxs']
-    fs = map(lambda n:(n*binsize)**2,range(len(fdata)))[:400]
-    [maxfft,ind] = max([(v,i) for i,v in enumerate(fdata)])
-    plt.clf()
-    plt.ylabel('FFT amplitude')
-    plt.xlabel('Frequencies')
-    plt.semilogy(fs,fdata)
-    plt.savefig(fn+str(stepnum)+'.png')
-    return [maxfft,fs[ind]] 
 
 def front_back_addition(tdata):
     halfdatal = len(tdata)/2      
