@@ -150,8 +150,8 @@ def square_amplitude(compnum):
 def phase(compnum):
     return np.argument(compnum)
 
-for ts in range(0,1001,100):
-    plot_simulation_step(simres,ts,square_amplitude,'wavef','blue','red')
+#for ts in range(0,1001,100):
+#    plot_simulation_step(simres,ts,square_amplitude,'wavef','blue','red')
 
 def front_back_addition(tdata):
     halfdatal = len(tdata)/2      
@@ -188,4 +188,14 @@ def fft_comparison(data,stepnums,fn):
         plt.cla()
         plt.close('all')
 
-fft_comparison(simres,range(0,1001,100),'fftnorm')
+#fft_comparison(simres,range(0,1001,100),'fftnorm')
+
+def first_derivative_wavefunction(wavef,step):
+    return [(wavef[i+1]-wavef[i-1])/step for i in range(1,len(wavef)-1)]
+
+#first_derivative_wavefunction(simres['wavefunction'][0],(1.0*simres['maximum_x'])/simres['numxs'])
+   
+def second_derivative_wavefunction(wavef,step):
+    return [(wavef[i-1]-2*wavef[i]+wavef[i+1])/step for i in range(1,len(wavef)-1)]
+    
+#second_derivative_wavefunction(simres['wavefunction'][0],(1.0*simres['maximum_x'])/simres['numxs'])
